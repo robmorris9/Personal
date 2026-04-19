@@ -61,6 +61,25 @@ body {
     display: block;
 }
 
+/* ─── PORTRAIT LOCK OVERLAY ─── */
+#portrait-lock {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: var(--ink);
+    color: var(--bg);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: 'Fredoka One', sans-serif;
+}
+@media (orientation: landscape) and (max-height: 600px) {
+    #portrait-lock { display: flex; }
+    .scroll-container { display: none; }
+}
+
 /* ─── FLAG ─── */
 .flag-sway {
     transform-box: fill-box;
@@ -76,10 +95,23 @@ body {
 .hey-t { animation: slideL .75s cubic-bezier(.22,1,.36,1) .3s both; }
 .meg-t { animation: slideR .75s cubic-bezier(.22,1,.36,1) .5s both; }
 
-/* ─── SCROLL BUTTON ─── */
+/* ─── SCROLL BUTTON & ARROWS ─── */
 .scroll-btn { opacity:0; animation: fadeIn 1s ease 2s forwards; cursor: pointer; }
 .scroll-arr { animation: bounceD 1.4s ease-in-out infinite; transform-box:fill-box; transform-origin: center top; }
 @keyframes bounceD { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
+
+.pulse-fade {
+    animation: pulseFade 2.5s ease-in-out infinite;
+    transform-box: fill-box; 
+    transform-origin: center;
+}
+@keyframes pulseFade {
+    0%, 100% { transform: translateY(0); opacity: 0.2; }
+    50% { transform: translateY(8px); opacity: 0.9; }
+}
+
+/* ─── SOUND TOGGLE ─── */
+#soundToggle { cursor: pointer; }
 
 /* ─── SUN ─── */
 .sun-rays { animation: spinCW 24s linear infinite; transform-box:fill-box; transform-origin: center center; }
@@ -135,6 +167,15 @@ body {
 </style>
 </head>
 <body>
+
+<div id="portrait-lock">
+    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
+        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+        <path d="M12 18h.01"></path>
+    </svg>
+    <h2>Please rotate<br>your device</h2>
+</div>
+
 <div class="scroll-container" id="scroller">
 
 <div class="page page-1" id="page1">
@@ -145,15 +186,20 @@ body {
     <text class="hey-t" x="375" y="318" text-anchor="middle" font-family="'Fredoka One',sans-serif" font-size="210" fill="#E8D4C0">HEY</text>
     <text class="meg-t" x="375" y="528" text-anchor="middle" font-family="'Fredoka One',sans-serif" font-size="210" fill="#E8D4C0">MEG</text>
 
-    <g style="opacity:0;animation:fadeIn 1.2s ease 2.2s forwards" transform="translate(180,930)">
+    <g id="soundToggle" style="opacity:0;animation:fadeIn 1.2s ease 2.2s forwards" transform="translate(180,930)">
         <g transform="translate(0,-42) scale(1.55)" style="transform-origin:0 0">
             <g transform="translate(-22,-18)">
                 <polygon points="0,10 10,10 22,2 22,38 10,30 0,30" fill="#E8D4C0" stroke="#E8D4C0" stroke-width="2" stroke-linejoin="round"></polygon>
-                <path d="M26,14 Q34,20 26,26" fill="none" stroke="#E8D4C0" stroke-width="3.5" stroke-linecap="round"></path>
-                <path d="M30,8 Q43,20 30,32" fill="none" stroke="#E8D4C0" stroke-width="3.5" stroke-linecap="round"></path>
+                <g id="icon-sound-on" style="display:none;">
+                    <path d="M26,14 Q34,20 26,26" fill="none" stroke="#E8D4C0" stroke-width="3.5" stroke-linecap="round"></path>
+                    <path d="M30,8 Q43,20 30,32" fill="none" stroke="#E8D4C0" stroke-width="3.5" stroke-linecap="round"></path>
+                </g>
+                <g id="icon-sound-off">
+                    <path d="M28,12 L40,28 M40,12 L28,28" fill="none" stroke="#E8D4C0" stroke-width="3.5" stroke-linecap="round"></path>
+                </g>
             </g>
         </g>
-        <text y="24" text-anchor="middle" font-family="'Fredoka One',sans-serif" font-size="20" fill="#E8D4C0" opacity=".65" letter-spacing="2">TAP FOR SOUND</text>
+        <text id="text-sound" y="24" text-anchor="middle" font-family="'Fredoka One',sans-serif" font-size="20" fill="#E8D4C0" opacity=".65" letter-spacing="2">TAP FOR SOUND</text>
     </g>
 
     <g style="opacity:0;animation:fadeIn .8s ease 1.1s forwards" transform="translate(375,615)">
@@ -283,6 +329,10 @@ body {
         </g>
     </g>
 
+    <g transform="translate(680, 500)">
+        <polyline class="pulse-fade" points="-15,0 0,15 15,0" fill="none" stroke="#2D5016" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    </g>
+
 </svg>
 </div>
 
@@ -366,10 +416,19 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
     obs.observe(page3);
 })();
 
+// AUDIO SYSTEM REWRITE
 var audioCtx = null;
-function initAudio() {
-    if (audioCtx) return;
+var masterGain = null;
+var isPlaying = false;
+
+function initAudioSystem() {
+    if (audioCtx) return; // Already initialized
+    
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0; // Start muted
+    masterGain.connect(audioCtx.destination);
+
     var ctx = audioCtx;
     var bufSize = ctx.sampleRate * 4;
     var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
@@ -382,7 +441,9 @@ function initAudio() {
         var flt = ctx.createBiquadFilter(); flt.type = type; flt.frequency.value = freq;
         if (q) flt.Q.value = q;
         var gn = ctx.createGain(); gn.gain.value = gain;
-        src.connect(flt); flt.connect(gn); gn.connect(ctx.destination); src.start();
+        src.connect(flt); flt.connect(gn); 
+        gn.connect(masterGain); // Connect to master instead of destination
+        src.start();
     }
     noise(120, null, 0.16, 'lowpass');
     noise(600,  3,   0.055);
@@ -394,7 +455,8 @@ function initAudio() {
             o.type = 'sine'; o.frequency.value = Math.random() * 180 + 80;
             g.gain.setValueAtTime(0.22, ctx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.065);
-            o.connect(g); g.connect(ctx.destination);
+            o.connect(g); 
+            g.connect(masterGain); // Connect to master instead of destination
             o.start(); o.stop(ctx.currentTime + 0.065);
             pop();
         }, Math.random() * 900 + 200);
@@ -416,7 +478,8 @@ function initAudio() {
                         g.gain.setValueAtTime(0, ctx.currentTime);
                         g.gain.linearRampToValueAtTime(0.048, ctx.currentTime + 0.025);
                         g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
-                        o.connect(g); g.connect(ctx.destination);
+                        o.connect(g); 
+                        g.connect(masterGain); // Connect to master instead of destination
                         o.start(); o.stop(ctx.currentTime + 0.15);
                     }, ii * 215);
                 })(i);
@@ -427,16 +490,26 @@ function initAudio() {
     chirp();
 }
 
-window.addEventListener('DOMContentLoaded', initAudio);
+function toggleAudio() {
+    initAudioSystem(); // Init on first tap if not already
+    
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
 
-['click', 'touchstart', 'scroll', 'mousemove'].forEach(function(ev) {
-    document.addEventListener(ev, function() {
-        initAudio();
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-    }, { once: true, capture: true });
-});
+    isPlaying = !isPlaying;
+    
+    // Smoothly ramp volume up or down to avoid clicking noises
+    masterGain.gain.setTargetAtTime(isPlaying ? 1 : 0, audioCtx.currentTime, 0.1);
+
+    // Update UI
+    document.getElementById('text-sound').textContent = isPlaying ? "SOUND ON" : "SOUND OFF";
+    document.getElementById('icon-sound-on').style.display = isPlaying ? "block" : "none";
+    document.getElementById('icon-sound-off').style.display = isPlaying ? "none" : "block";
+}
+
+document.getElementById('soundToggle').addEventListener('click', toggleAudio);
+
 </script>
 </body>
 </html>

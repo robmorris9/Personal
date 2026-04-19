@@ -103,7 +103,7 @@ body {
 
 /* ─── PAGE 2 DYNAMIC CARET ─── */
 .caret-hide { opacity: 0; transform: translateY(-15px); }
-.caret-show { animation: fadeDownIn 1.2s ease 1.5s forwards; }
+.caret-show { animation: fadeDownIn 1.2s ease 1s forwards; }
 @keyframes fadeDownIn {
     to { opacity: 0.85; transform: translateY(0); }
 }
@@ -443,15 +443,14 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
     }, { threshold: 0.35 });
     obs3.observe(page3);
 
-    // Page 2 Caret Arrow Observer
+    // Page 2 Caret Arrow Observer (Only fires ONCE now so it stays visible)
     var page2 = document.getElementById('page2');
     var p2Caret = document.getElementById('p2-caret');
     var obs2 = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
             if (e.isIntersecting) {
                 p2Caret.setAttribute('class', 'caret-show');
-            } else {
-                p2Caret.setAttribute('class', 'caret-hide');
+                obs2.unobserve(page2); // Stop watching so it never hides again
             }
         });
     }, { threshold: 0.35 });

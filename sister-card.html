@@ -121,10 +121,11 @@ body {
 @keyframes pulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 
 /* ─── BIRDS ─── */
-.birds-l { animation: flyL 16s linear infinite; will-change: transform; }
-.birds-r { animation: flyR 20s linear infinite 4s; will-change: transform; }
-@keyframes flyL { from{transform:translateX(950px)} to{transform:translateX(-400px)} }
-@keyframes flyR { from{transform:translateX(-900px)} to{transform:translateX(400px)} }
+/* Adjusted distances and durations so they don't "pop" in on ultrawide desktop monitors */
+.birds-l { animation: flyL 28s linear infinite; will-change: transform; }
+.birds-r { animation: flyR 35s linear infinite 4s; will-change: transform; }
+@keyframes flyL { from{transform:translateX(1500px)} to{transform:translateX(-800px)} }
+@keyframes flyR { from{transform:translateX(-800px)} to{transform:translateX(1500px)} }
 
 /* ─── FLAMES ─── */
 .fl { transform-box:fill-box; transform-origin: center bottom; }
@@ -143,8 +144,9 @@ body {
 @keyframes waveR { from{transform:translateX(0)} to{transform:translateX(400px)} }
 
 /* ─── CANOE ─── */
-.canoe { animation: canoeX 28s linear infinite 2s; will-change: transform; }
-@keyframes canoeX { from{transform:translateX(-160px)} to{transform:translateX(930px)} }
+/* Stretched travel distance to account for ultrawide desktop monitors */
+.canoe { animation: canoeX 50s linear infinite 2s; will-change: transform; }
+@keyframes canoeX { from{transform:translateX(-600px)} to{transform:translateX(1350px)} }
 
 /* ─── OWL ─── */
 .owl-float { animation: owlF 3.8s ease-in-out infinite; transform-box:fill-box; transform-origin: center bottom; }
@@ -222,9 +224,9 @@ body {
 </div>
 
 <div class="page page-2" id="page2">
-<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid meet" style="overflow: visible;" xmlns="http://www.w3.org/2000/svg">
 
-    <rect width="750" height="540" fill="#E8D4C0"></rect>
+    <rect x="-1500" y="0" width="3750" height="540" fill="#E8D4C0"></rect>
 
     <g transform="translate(104,104)">
         <g class="sun-rays">
@@ -267,21 +269,29 @@ body {
         </g>
     </g>
 
+    <polygon points="-1000,540 -700,210 -400,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    <polygon points="-600,540 -250,260 20,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="-40,540 145,238 368,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="270,540 460,195 660,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="590,540 760,222 920,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    <polygon points="800,540 1050,240 1400,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    <polygon points="1200,540 1500,210 1900,540" fill="#3D6B20" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     
+    <polygon points="-1300,540 -950,280 -600,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    <polygon points="-750,540 -450,320 -150,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="-80,540 62,312 260,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="148,540 348,270 558,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="470,540 658,290 858,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     <polygon points="680,540 820,330 990,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    <polygon points="900,540 1200,310 1600,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    <polygon points="1400,540 1700,280 2200,540" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
 
-    <rect x="-10" y="534" width="780" height="290" fill="#38706B" stroke="#1A4A28" stroke-width="6"></rect>
+    <rect x="-1500" y="534" width="3750" height="290" fill="#38706B" stroke="#1A4A28" stroke-width="6"></rect>
 
-    <path class="wl" style="--wd:12s" d="M-800,590 q100,-28 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="5" stroke-linecap="round"></path>
-    <path class="wr" style="--wd:16s" d="M-800,635 q100,-24 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="4.5" stroke-linecap="round"></path>
-    <path class="wl" style="--wd:14s" d="M-800,685 q100,-30 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="4" stroke-linecap="round"></path>
-    <path class="wr" style="--wd:18s" d="M-800,740 q100,-20 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="3" stroke-linecap="round"></path>
+    <path class="wl" style="--wd:12s" d="M-2000,590 q100,-28 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="5" stroke-linecap="round"></path>
+    <path class="wr" style="--wd:16s" d="M-2000,635 q100,-24 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="4.5" stroke-linecap="round"></path>
+    <path class="wl" style="--wd:14s" d="M-2000,685 q100,-30 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="4" stroke-linecap="round"></path>
+    <path class="wr" style="--wd:18s" d="M-2000,740 q100,-20 200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0 t200,0" fill="none" stroke="#1A4A28" stroke-width="3" stroke-linecap="round"></path>
 
     <g class="canoe">
         <g transform="translate(0,600)">
@@ -293,7 +303,7 @@ body {
         </g>
     </g>
 
-    <path d="M-50,1200 L-50,792 Q188,724 375,758 T800,730 L800,1200 Z" fill="#E8D4C0" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></path>
+    <path d="M-2000,1200 L-2000,792 L-50,792 Q188,724 375,758 T800,730 L2500,730 L2500,1200 Z" fill="#E8D4C0" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></path>
 
     <g transform="translate(150,810) scale(0.72)">
         <rect x="-10" y="-38" width="20" height="38" fill="#A65D2E" stroke="#1A4A28" stroke-width="5"></rect>
@@ -309,6 +319,27 @@ body {
         <rect x="-11" y="-42" width="22" height="42" fill="#A65D2E" stroke="#1A4A28" stroke-width="5"></rect>
         <polygon points="0,-270 88,0 -88,0" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
         <polygon points="0,-370 72,-110 -72,-110" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    </g>
+
+    <g transform="translate(-150, 780) scale(0.6)">
+        <rect x="-10" y="-38" width="20" height="38" fill="#A65D2E" stroke="#1A4A28" stroke-width="5"></rect>
+        <polygon points="0,-240 72,0 -72,0" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+        <polygon points="0,-330 58,-100 -58,-100" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    </g>
+    <g transform="translate(-450, 810) scale(0.8)">
+        <rect x="-10" y="-38" width="20" height="38" fill="#A65D2E" stroke="#1A4A28" stroke-width="5"></rect>
+        <polygon points="0,-240 72,0 -72,0" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+        <polygon points="0,-330 58,-100 -58,-100" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    </g>
+    <g transform="translate(950, 800) scale(0.75)">
+        <rect x="-10" y="-38" width="20" height="38" fill="#A65D2E" stroke="#1A4A28" stroke-width="5"></rect>
+        <polygon points="0,-240 72,0 -72,0" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+        <polygon points="0,-330 58,-100 -58,-100" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+    </g>
+    <g transform="translate(1300, 770) scale(0.5)">
+        <rect x="-10" y="-38" width="20" height="38" fill="#A65D2E" stroke="#1A4A28" stroke-width="5"></rect>
+        <polygon points="0,-240 72,0 -72,0" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
+        <polygon points="0,-330 58,-100 -58,-100" fill="#2D5016" stroke="#1A4A28" stroke-width="6" stroke-linejoin="round"></polygon>
     </g>
 
     <g transform="translate(480,825) rotate(15)">

@@ -102,11 +102,7 @@ body {
 @keyframes bounceD { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
 
 /* ─── PAGE 2 DYNAMIC CARET ─── */
-.caret-hide { opacity: 0; transform: translateY(-15px); }
-.caret-show { animation: fadeDownIn 1.2s ease 1s forwards; }
-@keyframes fadeDownIn {
-    to { opacity: 0.85; transform: translateY(0); }
-}
+.fade-in-delayed { animation: fadeIn 1.2s ease 1s forwards; }
 
 /* ─── SOUND TOGGLE ─── */
 #soundToggle { cursor: pointer; }
@@ -118,8 +114,8 @@ body {
 @keyframes pulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 
 /* ─── BIRDS ─── */
-.birds-l { animation: flyL 28s linear infinite; will-change: transform; }
-.birds-r { animation: flyR 35s linear infinite 4s; will-change: transform; }
+.birds-l { animation: flyL 28s linear infinite; }
+.birds-r { animation: flyR 35s linear infinite 4s; }
 @keyframes flyL { from{transform:translateX(1500px)} to{transform:translateX(-800px)} }
 @keyframes flyR { from{transform:translateX(-800px)} to{transform:translateX(1500px)} }
 
@@ -134,13 +130,13 @@ body {
 @keyframes fB { 0%,100%{transform:scaleY(1.1) rotate(4deg) skewX(2deg)} 50%{transform:scaleY(.85) rotate(-4deg) skewX(-2deg)} }
 
 /* ─── WAVES ─── */
-.wl { animation: waveL var(--wd,12s) linear infinite; will-change:transform; }
-.wr { animation: waveR var(--wd,16s) linear infinite; will-change:transform; }
+.wl { animation: waveL var(--wd,12s) linear infinite; }
+.wr { animation: waveR var(--wd,16s) linear infinite; }
 @keyframes waveL { from{transform:translateX(0)} to{transform:translateX(-400px)} }
 @keyframes waveR { from{transform:translateX(0)} to{transform:translateX(400px)} }
 
 /* ─── CANOE ─── */
-.canoe { animation: canoeX 50s linear infinite 2s; will-change: transform; }
+.canoe { animation: canoeX 50s linear infinite 2s; }
 @keyframes canoeX { from{transform:translateX(-600px)} to{transform:translateX(1350px)} }
 
 /* ─── OWL ─── */
@@ -356,8 +352,10 @@ body {
         </g>
     </g>
 
-    <g id="p2-caret" class="caret-hide" transform="translate(375, 960)">
-        <polyline class="scroll-arr" points="-18,-10 0,5 18,-10" fill="none" stroke="#1A4A28" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"></polyline>
+    <g transform="translate(375, 960)">
+        <g id="p2-caret" style="opacity: 0;">
+            <polyline class="scroll-arr" points="-18,-10 0,5 18,-10" fill="none" stroke="#1A4A28" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"></polyline>
+        </g>
     </g>
 
 </svg>
@@ -443,14 +441,14 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
     }, { threshold: 0.35 });
     obs3.observe(page3);
 
-    // Page 2 Caret Arrow Observer (Only fires ONCE now so it stays visible)
+    // Page 2 Caret Arrow Observer
     var page2 = document.getElementById('page2');
     var p2Caret = document.getElementById('p2-caret');
     var obs2 = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
             if (e.isIntersecting) {
-                p2Caret.setAttribute('class', 'caret-show');
-                obs2.unobserve(page2); // Stop watching so it never hides again
+                p2Caret.setAttribute('class', 'fade-in-delayed');
+                obs2.unobserve(page2); 
             }
         });
     }, { threshold: 0.35 });

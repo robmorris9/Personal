@@ -58,10 +58,11 @@ body {
 .poster-svg {
     width: 100%;
     height: 100%;
+    max-height: 100dvh;
     display: block;
 }
 
-/* ─── PORTRAIT LOCK OVERLAY ─── */
+/* ─── PORTRAIT LOCK OVERLAY (Mobile Touch Devices Only) ─── */
 #portrait-lock {
     display: none;
     position: fixed;
@@ -75,7 +76,7 @@ body {
     text-align: center;
     font-family: 'Fredoka One', sans-serif;
 }
-@media (orientation: landscape) and (max-height: 600px) {
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
     #portrait-lock { display: flex; }
     .scroll-container { display: none; }
 }
@@ -179,7 +180,7 @@ body {
 <div class="scroll-container" id="scroller">
 
 <div class="page page-1" id="page1">
-<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 
     <rect width="750" height="1000" fill="#1A4A28"></rect>
 
@@ -221,7 +222,7 @@ body {
 </div>
 
 <div class="page page-2" id="page2">
-<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 
     <rect width="750" height="540" fill="#E8D4C0"></rect>
 
@@ -337,7 +338,7 @@ body {
 </div>
 
 <div class="page page-3" id="page3">
-<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<svg class="poster-svg" viewBox="0 0 750 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 
     <rect width="750" height="1000" fill="#E8D4C0"></rect>
 
@@ -416,17 +417,16 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
     obs.observe(page3);
 })();
 
-// AUDIO SYSTEM REWRITE
 var audioCtx = null;
 var masterGain = null;
 var isPlaying = false;
 
 function initAudioSystem() {
-    if (audioCtx) return; // Already initialized
+    if (audioCtx) return; 
     
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0; // Start muted
+    masterGain.gain.value = 0; 
     masterGain.connect(audioCtx.destination);
 
     var ctx = audioCtx;
@@ -442,7 +442,7 @@ function initAudioSystem() {
         if (q) flt.Q.value = q;
         var gn = ctx.createGain(); gn.gain.value = gain;
         src.connect(flt); flt.connect(gn); 
-        gn.connect(masterGain); // Connect to master instead of destination
+        gn.connect(masterGain); 
         src.start();
     }
     noise(120, null, 0.16, 'lowpass');
@@ -456,7 +456,7 @@ function initAudioSystem() {
             g.gain.setValueAtTime(0.22, ctx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.065);
             o.connect(g); 
-            g.connect(masterGain); // Connect to master instead of destination
+            g.connect(masterGain); 
             o.start(); o.stop(ctx.currentTime + 0.065);
             pop();
         }, Math.random() * 900 + 200);
@@ -479,7 +479,7 @@ function initAudioSystem() {
                         g.gain.linearRampToValueAtTime(0.048, ctx.currentTime + 0.025);
                         g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
                         o.connect(g); 
-                        g.connect(masterGain); // Connect to master instead of destination
+                        g.connect(masterGain); 
                         o.start(); o.stop(ctx.currentTime + 0.15);
                     }, ii * 215);
                 })(i);
@@ -491,7 +491,7 @@ function initAudioSystem() {
 }
 
 function toggleAudio() {
-    initAudioSystem(); // Init on first tap if not already
+    initAudioSystem(); 
     
     if (audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -499,10 +499,8 @@ function toggleAudio() {
 
     isPlaying = !isPlaying;
     
-    // Smoothly ramp volume up or down to avoid clicking noises
     masterGain.gain.setTargetAtTime(isPlaying ? 1 : 0, audioCtx.currentTime, 0.1);
 
-    // Update UI
     document.getElementById('text-sound').textContent = isPlaying ? "SOUND ON" : "SOUND OFF";
     document.getElementById('icon-sound-on').style.display = isPlaying ? "block" : "none";
     document.getElementById('icon-sound-off').style.display = isPlaying ? "none" : "block";

@@ -96,19 +96,16 @@ body {
 .hey-t { animation: slideL .75s cubic-bezier(.22,1,.36,1) .3s both; }
 .meg-t { animation: slideR .75s cubic-bezier(.22,1,.36,1) .5s both; }
 
-/* ─── SCROLL BUTTON & ARROWS ─── */
+/* ─── SCROLL ARROWS ─── */
 .scroll-btn { opacity:0; animation: fadeIn 1s ease 2s forwards; cursor: pointer; }
 .scroll-arr { animation: bounceD 1.4s ease-in-out infinite; transform-box:fill-box; transform-origin: center top; }
 @keyframes bounceD { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
 
-.pulse-fade {
-    animation: pulseFade 2.5s ease-in-out infinite;
-    transform-box: fill-box; 
-    transform-origin: center;
-}
-@keyframes pulseFade {
-    0%, 100% { transform: translateY(0); opacity: 0.2; }
-    50% { transform: translateY(8px); opacity: 0.9; }
+/* ─── PAGE 2 DYNAMIC CARET ─── */
+.caret-hide { opacity: 0; transform: translateY(-15px); }
+.caret-show { animation: fadeDownIn 1.2s ease 1.5s forwards; }
+@keyframes fadeDownIn {
+    to { opacity: 0.85; transform: translateY(0); }
 }
 
 /* ─── SOUND TOGGLE ─── */
@@ -121,7 +118,6 @@ body {
 @keyframes pulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 
 /* ─── BIRDS ─── */
-/* Adjusted distances and durations so they don't "pop" in on ultrawide desktop monitors */
 .birds-l { animation: flyL 28s linear infinite; will-change: transform; }
 .birds-r { animation: flyR 35s linear infinite 4s; will-change: transform; }
 @keyframes flyL { from{transform:translateX(1500px)} to{transform:translateX(-800px)} }
@@ -144,7 +140,6 @@ body {
 @keyframes waveR { from{transform:translateX(0)} to{transform:translateX(400px)} }
 
 /* ─── CANOE ─── */
-/* Stretched travel distance to account for ultrawide desktop monitors */
 .canoe { animation: canoeX 50s linear infinite 2s; will-change: transform; }
 @keyframes canoeX { from{transform:translateX(-600px)} to{transform:translateX(1350px)} }
 
@@ -361,8 +356,8 @@ body {
         </g>
     </g>
 
-    <g transform="translate(680, 500)">
-        <polyline class="pulse-fade" points="-15,0 0,15 15,0" fill="none" stroke="#2D5016" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    <g id="p2-caret" class="caret-hide" transform="translate(375, 960)">
+        <polyline class="scroll-arr" points="-18,-10 0,5 18,-10" fill="none" stroke="#1A4A28" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"></polyline>
     </g>
 
 </svg>
@@ -424,6 +419,7 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
 });
 
 (function() {
+    // Page 3 Text Animation Observer
     var page3 = document.getElementById('page3');
     var items = [
         { id:'m1', base:'msg-l',   vis:'msg-l vis' },
@@ -431,7 +427,7 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
         { id:'m3', base:'msg-l',   vis:'msg-l vis' },
         { id:'m4', base:'sign-off',vis:'sign-off vis' },
     ];
-    var obs = new IntersectionObserver(function(entries) {
+    var obs3 = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
             items.forEach(function(item, i) {
                 var el = document.getElementById(item.id);
@@ -445,7 +441,21 @@ document.getElementById('scrollBtn').addEventListener('click', function() {
             });
         });
     }, { threshold: 0.35 });
-    obs.observe(page3);
+    obs3.observe(page3);
+
+    // Page 2 Caret Arrow Observer
+    var page2 = document.getElementById('page2');
+    var p2Caret = document.getElementById('p2-caret');
+    var obs2 = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (e.isIntersecting) {
+                p2Caret.setAttribute('class', 'caret-show');
+            } else {
+                p2Caret.setAttribute('class', 'caret-hide');
+            }
+        });
+    }, { threshold: 0.35 });
+    obs2.observe(page2);
 })();
 
 var audioCtx = null;
